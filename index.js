@@ -119,12 +119,35 @@ app.get('/movies/get/by-title', (req, res) => {
     res.send({status:200, data:movies});
 })
 
+/**
+ * 
+ * Step 7
+ * 
+ */
+app.get('/movies/read/id/:id', (req, res) => {
+    selectedId = req.params.id - 1;
+    var result;
+    if(!isNaN(selectedId)){
+        if(selectedId < movies.length || selectedId < 0 ){
+            result = movies[selectedId];
+            res.send({status:200, message:result});
+        }
+        else {
+            console.log("dghsidj");
+            res.status(404);
+            res.send({status:404, error:true , message: "the movie " + (selectedId+1) +" does not exist"});
+        }
+    }
+    else {
+        res.status(500);
+        res.send({status:500, error:true , message: "Please enter a number"});
+    }
+
+    //const result = movies[selectedId];
+    
+  })
 
 
-/*movies.sort(function(a, b) {
-    var dateA = new Date(a.release), dateB = new Date(b.release);
-    return dateA - dateB;
-});*/
 
 
 
