@@ -45,6 +45,7 @@ app.get('/time', (req, res) => {
  * url/search?s=<SEARCH> -> gives status 200 and message ok and data:<SEARCH>
  * and if
  * url/search?s=    -> sets status to 500 and error true and you have to provide a search
+ * 
  */
 app.get('/hello/:name', (req, res) => {
     res.send({status:200, message:"hello, "+req.params.name+"!"});
@@ -88,6 +89,42 @@ app.get('/movies/delete', (req, res) => {
 
 })
 
+/**
+ * 
+ * Step 6
+ * 
+ */
+app.get('/movies/get/by-date', (req, res) => {
+    movies.sort(function(a, b) {
+        var dateA = new Date(a.year), dateB = new Date(b.year);
+        return dateA - dateB;
+    });
+    res.send({status:200, data:movies});
+})
+
+app.get('/movies/get/by-rating', (req, res) => {
+    movies.sort(function(b, a) {
+        return a.rating - b.rating;
+    });
+    res.send({status:200, data:movies});
+})
+
+app.get('/movies/get/by-title', (req, res) => {
+    movies.sort(function(a, b) {
+        var titleA = a.title.toLowerCase(), titleB = b.title.toLowerCase();
+        if (titleA < titleB) return -1;
+        if (titleA > titleB) return 1;
+        return 0;
+    });
+    res.send({status:200, data:movies});
+})
+
+
+
+/*movies.sort(function(a, b) {
+    var dateA = new Date(a.release), dateB = new Date(b.release);
+    return dateA - dateB;
+});*/
 
 
 
