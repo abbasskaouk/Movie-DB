@@ -146,8 +146,7 @@ app.get('/movies/edit/:id', (req, res) => {
 })
 
 app.get('/movies/delete/:id', (req, res) => {
-    selectedId = req.params.id - 1;
-    var result;
+    selectedId = req.params.id - 1; 
     if(!isNaN(selectedId)){
         if(selectedId < movies.length && selectedId >= 0 ){
             movies.splice(selectedId,1);
@@ -224,12 +223,6 @@ app.get('/movies/read/id/:id', (req, res) => {
   })
 
 
-/**************
- * 
- * Step 8
- * 
- */
- 
 
 
 
