@@ -114,8 +114,35 @@ app.get('/movies/get', (req, res) => {
     res.send({status:200, data:movies});
 })
 
-app.get('/movies/edit', (req, res) => {
+app.get('/movies/edit/:id', (req, res) => {
+    selectedId = req.params.id - 1;
+    let titleToEdit , yearToEdit , ratingToEdit ;
+    let x = {};
+    if (req.query.title) titleToEdit = req.query.title;
+    if (req.query.year) yearToEdit = parseInt(req.query.year);
+    if (req.query.rating) ratingToEdit = parseInt(req.query.rating);
+    
+    if (titleToEdit){
+      x.title = titleToEdit;
+    }
+    if (yearToEdit){
+      x.year = yearToEdit;
+    }
+    if (ratingToEdit){
+      x.rating = ratingToEdit;
+    }
 
+    
+    if ( x.hasOwnProperty('title')){
+      movies[selectedId].title = x.title;
+    }
+    if ( x.hasOwnProperty('year')){
+      movies[selectedId].year = x.year;
+    }
+    if ( x.hasOwnProperty('rating')){
+      movies[selectedId].rating = x.rating;
+    }
+    res.send({status:200 , data:movies});
 })
 
 app.get('/movies/delete/:id', (req, res) => {
