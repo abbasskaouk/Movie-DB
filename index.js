@@ -72,10 +72,39 @@ app.get('/search', (req, res) => {
  * create: /movies/add, /movies/get, /movies/edit, /movies/delete,
  * make /movies/get returns the movies in movies array
  * 
+ * step 8
+ * /movies/add?title=..&year=..&rating=..
+ * adds the requested data in the link
+ * where {
+ *    title cannot be empty
+ *    year cannot be empty or not a number or length different from 4
+ *    and if rating is empty: rating = 4
+ * }
+ * 
  */
 app.get('/movies/add', (req, res) => {
-
-  })
+    const titleToAdd = req.query.title;
+    const yearToAdd = req.query.year;
+    const ratingToAdd = req.query.rating;
+    var str = yearToAdd.toString();
+    var length = str.length;
+    if(titleToAdd == "" || yearToAdd == "" || isNaN(yearToAdd) || length != 4){
+      res.status(403);  
+      res.send({status:403, error:true, message:'you cannot create a movie without providing a title and a year'})
+    }
+    else {
+      var intYear = parseInt(yearToAdd);
+      var intRating = parseInt(ratingToAdd);
+      if (ratingToAdd == ""){
+        movies.push({title:titleToAdd,year:intYear,rating:4})
+        res.send({status:200, data:movies});
+      }
+      else {
+        movies.push({title:titleToAdd,year:intYear,rating:intRating})
+        res.send({status:200, data:movies});
+      }
+    }
+})
 
 app.get('/movies/get', (req, res) => {
     res.send({status:200, data:movies});
@@ -92,6 +121,8 @@ app.get('/movies/delete', (req, res) => {
 /**
  * 
  * Step 6
+ * 
+ * get movies by date, by rating and by title
  * 
  */
 app.get('/movies/get/by-date', (req, res) => {
@@ -123,6 +154,8 @@ app.get('/movies/get/by-title', (req, res) => {
  * 
  * Step 7
  * 
+ * select a specific movie from the array
+ * 
  */
 app.get('/movies/read/id/:id', (req, res) => {
     selectedId = req.params.id - 1;
@@ -142,14 +175,15 @@ app.get('/movies/read/id/:id', (req, res) => {
         res.status(500);
         res.send({status:500, error:true , message: "Please enter a number"});
     }
-
-    //const result = movies[selectedId];
-    
   })
 
 
-
-
+/**************
+ * 
+ * Step 8
+ * 
+ */
+ 
 
 
 
