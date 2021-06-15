@@ -81,6 +81,10 @@ app.get('/search', (req, res) => {
  *    and if rating is empty: rating = 4
  * }
  * 
+ * Step 9
+ * /movies/delete/<ID>
+ * delete the movie with the requested ID
+ * 
  */
 app.get('/movies/add', (req, res) => {
     const titleToAdd = req.query.title;
@@ -114,8 +118,23 @@ app.get('/movies/edit', (req, res) => {
 
 })
 
-app.get('/movies/delete', (req, res) => {
-
+app.get('/movies/delete/:id', (req, res) => {
+    selectedId = req.params.id - 1;
+    var result;
+    if(!isNaN(selectedId)){
+        if(selectedId < movies.length && selectedId >= 0 ){
+            movies.splice(selectedId,1);
+            res.send({status:200, message:movies});
+        }
+        else {
+            res.status(404);
+            res.send({status:404, error:true , message: "the movie " + (selectedId+1) +" does not exist"});
+        }
+    }
+    else {
+        res.status(500);
+        res.send({status:500, error:true , message: "Please enter a number"});
+    }
 })
 
 /**
@@ -160,13 +179,13 @@ app.get('/movies/get/by-title', (req, res) => {
 app.get('/movies/read/id/:id', (req, res) => {
     selectedId = req.params.id - 1;
     var result;
+    console.log(movies.length);
     if(!isNaN(selectedId)){
-        if(selectedId < movies.length || selectedId < 0 ){
+        if(selectedId < movies.length && selectedId >= 0 ){
             result = movies[selectedId];
             res.send({status:200, message:result});
         }
         else {
-            console.log("dghsidj");
             res.status(404);
             res.send({status:404, error:true , message: "the movie " + (selectedId+1) +" does not exist"});
         }
