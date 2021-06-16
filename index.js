@@ -1,6 +1,11 @@
-const express = require('express')
-const app = express()
-const port = 3000
+
+
+const express = require('express');
+const app = express();
+const port = 3000;
+
+app.use(express.json());
+
 var d = new Date();
 var date = d.getHours() + ":" + d.getMinutes();
 const movies = [
@@ -86,10 +91,11 @@ app.get('/search', (req, res) => {
  * delete the movie with the requested ID
  * 
  */
-app.get('/movies/add', (req, res) => {
-    const titleToAdd = req.query.title;
-    const yearToAdd = req.query.year;
-    const ratingToAdd = req.query.rating;
+app.post('/movies/add', (req, res) => {
+
+    const titleToAdd = req.body.title;
+    const yearToAdd = req.body.year;
+    const ratingToAdd = req.body.rating;
     var str = yearToAdd.toString();
     var length = str.length;
     if(titleToAdd == "" || yearToAdd == "" || isNaN(yearToAdd) || length != 4){
@@ -114,13 +120,13 @@ app.get('/movies/get', (req, res) => {
     res.send({status:200, data:movies});
 })
 
-app.get('/movies/edit/:id', (req, res) => {
+app.patch('/movies/edit/:id', (req, res) => {
     selectedId = req.params.id - 1;
     let titleToEdit , yearToEdit , ratingToEdit ;
     let x = {};
-    if (req.query.title) titleToEdit = req.query.title;
-    if (req.query.year) yearToEdit = parseInt(req.query.year);
-    if (req.query.rating) ratingToEdit = parseInt(req.query.rating);
+    if (req.body.title) titleToEdit = req.body.title;
+    if (req.body.year) yearToEdit = parseInt(req.body.year);
+    if (req.body.rating) ratingToEdit = parseInt(req.body.rating);
     
     if (titleToEdit){
       x.title = titleToEdit;
@@ -145,7 +151,7 @@ app.get('/movies/edit/:id', (req, res) => {
     res.send({status:200 , data:movies});
 })
 
-app.get('/movies/delete/:id', (req, res) => {
+app.delete('/movies/delete/:id', (req, res) => {
     selectedId = req.params.id - 1; 
     if(!isNaN(selectedId)){
         if(selectedId < movies.length && selectedId >= 0 ){
@@ -205,7 +211,6 @@ app.get('/movies/get/by-title', (req, res) => {
 app.get('/movies/read/id/:id', (req, res) => {
     selectedId = req.params.id - 1;
     var result;
-    console.log(movies.length);
     if(!isNaN(selectedId)){
         if(selectedId < movies.length && selectedId >= 0 ){
             result = movies[selectedId];
